@@ -47,11 +47,12 @@ export default function JobsBoard() {
   useEffect(() => {
     if (jobStories.length === 0) return;
 
-    const fetchJobs = async () => {
+    // IFFE function
+    (async () => {
       try {
         // Set initial loading UI
         setIsLoading(true);
-        
+
         const clonedJobs = [...jobs];
         const jobsToFetch = jobStories.slice(pageLimit - 6, pageLimit);
 
@@ -68,9 +69,7 @@ export default function JobsBoard() {
       } catch (error) {
         console.error("Error fetching job data:", error);
       }
-    };
-
-    fetchJobs();
+    })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jobStories, pageLimit]);
 
@@ -98,21 +97,24 @@ export default function JobsBoard() {
           return <Job key={j.id} title={j.title} author={j.by} time={j.time} />;
         })}
 
-        <div style={{ margin: "2rem 0" }}>
-          <button
-            style={{
-              backgroundColor: "orange",
-              color: "white",
-              border: "none",
-              borderRadius: "1rem",
-              padding: "1rem",
-              fontSize: "1.5rem",
-            }}
-            onClick={onLoadJobs}
-          >
-            {isLoading ? "Loading..." : "Load More"}
-          </button>
-        </div>
+        {pageLimit < jobStories.length && (
+          <div style={{ margin: "2rem 0" }}>
+            <button
+              style={{
+                backgroundColor: "orange",
+                color: "white",
+                border: "none",
+                borderRadius: "1rem",
+                padding: "1rem",
+                fontSize: "1.5rem",
+              }}
+              disabled={isLoading}
+              onClick={onLoadJobs}
+            >
+              {isLoading ? "Loading..." : "Load More"}
+            </button>
+          </div>
+        )}
       </div>
     </>
   );
