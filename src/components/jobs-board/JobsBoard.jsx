@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 
-const JOB_API_URL = "https://hacker-news.firebaseio.com/v0/item/{jobID}.json";
-const STORIES_API_URL = "https://hacker-news.firebaseio.com/v0/jobstories.json";
+
+const API_URL = 'https://hacker-news.firebaseio.com/v0';
 
 function Job({ title, author, time }) {
   const date = new Date(time * 1000);
@@ -32,23 +32,21 @@ export default function JobsBoard() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // IFFE function
-    (async () => {
+    async function fetchJobStories() {
       try {
-        const response = await fetch(STORIES_API_URL);
+        const response = await fetch(`${API_URL}/jobstories.json`);
         const data = await response.json();
         setJobStories(data);
       } catch (error) {
         console.error("Error fetching job stories:", error);
       }
-    })();
+    }
+    fetchJobStories();
   }, []);
 
   useEffect(() => {
     if (jobStories.length === 0) return;
-
-    // IFFE function
-    (async () => {
+    async function fetchJobs() {
       try {
         // Set initial loading UI
         setIsLoading(true);
@@ -57,7 +55,8 @@ export default function JobsBoard() {
         const jobsToFetch = jobStories.slice(pageLimit - 6, pageLimit);
 
         for (const jobID of jobsToFetch) {
-          const response = await fetch(JOB_API_URL.replace("{jobID}", jobID));
+          // const response = await fetch(JOB_API_URL.replace("{jobID}", jobID));
+          const response = await fetch(`${API_URL}/item/${jobID}.json`);
           const data = await response.json();
           clonedJobs.push(data);
         }
@@ -69,7 +68,8 @@ export default function JobsBoard() {
       } catch (error) {
         console.error("Error fetching job data:", error);
       }
-    })();
+    }
+    fetchJobs();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jobStories, pageLimit]);
 
