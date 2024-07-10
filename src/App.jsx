@@ -2,7 +2,8 @@ import Tab from "./components/tab/Tab";
 import Accordions from "./components/accordion/Accordion";
 import TrafficLight from "./components/traffic-light/TrafficLight";
 import ColorBox from "./components/color-box/ColorBox";
-import JobsBoardParallel from "./components/jobs-board/JobsBoardParallel";
+// import JobsBoardParallel from "./components/jobs-board/JobsBoardParallel";
+import JobsBoard from "./components/jobs-board/JobsBoard";
 
 function App() {
   return (
@@ -38,7 +39,7 @@ function App() {
       <div className="wrapper">
         <div className="container">
           <h1 style={{ color: "orange" }}>Jobs Board</h1>
-          <JobsBoardParallel />
+          <JobsBoard />
         </div>
       </div>
     </>

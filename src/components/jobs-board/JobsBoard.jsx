@@ -1,8 +1,7 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 
-
-const API_URL = 'https://hacker-news.firebaseio.com/v0';
+const API_URL = "https://hacker-news.firebaseio.com/v0";
 
 function Job({ title, author, time }) {
   const date = new Date(time * 1000);
@@ -46,23 +45,30 @@ export default function JobsBoard() {
 
   useEffect(() => {
     if (jobStories.length === 0) return;
+
     async function fetchJobs() {
       try {
         // Set initial loading UI
         setIsLoading(true);
 
-        const clonedJobs = [...jobs];
-        const jobsToFetch = jobStories.slice(pageLimit - 6, pageLimit);
+        // const clonedJobs = [...jobs];
 
-        for (const jobID of jobsToFetch) {
-          // const response = await fetch(JOB_API_URL.replace("{jobID}", jobID));
-          const response = await fetch(`${API_URL}/item/${jobID}.json`);
-          const data = await response.json();
-          clonedJobs.push(data);
-        }
+        // for (const jobID of jobsToFetch) {
+        //   // const response = await fetch(JOB_API_URL.replace("{jobID}", jobID));
+        //   const response = await fetch(`${API_URL}/item/${jobID}.json`);
+        //   const data = await response.json();
+        //   clonedJobs.push(data);
+        // }
+
+        const jobsToFetch = jobStories.slice(pageLimit - 6, pageLimit);
+        const clonedJobs = await Promise.all(
+          jobsToFetch.map((jobID) =>
+            fetch(`${API_URL}/item/${jobID}.json`).then((res) => res.json())
+          )
+        );
 
         // Update jobs state with fetched job data
-        setJobs(clonedJobs);
+        setJobs((prevJobs) => [...prevJobs, ...clonedJobs]);
         // Remove loading UI
         setIsLoading(false);
       } catch (error) {
