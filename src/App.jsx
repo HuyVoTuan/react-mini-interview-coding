@@ -2,8 +2,9 @@ import Tab from "./components/tab/Tab";
 import Accordions from "./components/accordion/Accordion";
 import TrafficLight from "./components/traffic-light/TrafficLight";
 import ColorBox from "./components/color-box/ColorBox";
-// import JobsBoardParallel from "./components/jobs-board/JobsBoardParallel";
 import JobsBoard from "./components/jobs-board/JobsBoard";
+import PreventComponentRerender from "./components/prevent-components-rerender/PreventComponentRerender";
+import SkipFirstRender from "./components/skip-first-render/SkipFirstRender";
 
 function App() {
   return (
@@ -40,6 +41,19 @@ function App() {
         <div className="container">
           <h1 style={{ color: "orange" }}>Jobs Board</h1>
           <JobsBoard />
+        </div>
+      </div>
+
+      <div className="wrapper">
+        <div className="container">
+          <h1>Skip First Render</h1>
+          <SkipFirstRender />
+        </div>
+      </div>
+
+      <div className="wrapper">
+        <div className="container">
+          <PreventComponentRerender />
         </div>
       </div>
     </>
